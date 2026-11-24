@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ app_name }} — Descargar Videos de YouTube</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}" />
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <main class="container">
+    <header class="hero">
+      <div class="badge">FastAPI + Jinja2 + yt-dlp</div>
+      <h1>{{ app_name }}</h1>
+      <p class="subtitle">
+        Pega el enlace de cualquier video de YouTube, elige la calidad y descárgalo al instante.
+      </p>
+    </header>
+
+    <section class="card">
+      <form id="url-form" class="input-group" autocomplete="off">
+        <input
+          id="youtube-url"
+          type="url"
+          name="url"
+          placeholder="https://www.youtube.com/watch?v=..."
+          aria-label="Enlace del video de YouTube"
+          required
+        />
+        <button type="submit" id="btn-analyze" class="btn btn-secondary">
+          Analizar
+        </button>
+        <button type="button" id="btn-quick-download" class="btn btn-primary">
+          Descargar
+        </button>
+      </form>
+
+      <div id="alert-box" class="alert hidden" role="alert"></div>
+
+      <!-- Preview del video -->
+      <div id="video-preview" class="preview hidden">
+        <div class="thumb-wrap">
+          <img id="preview-thumb" src="" alt="Miniatura del video" />
+          <span id="preview-duration" class="duration-pill">0:00</span>
+        </div>
+        <div class="preview-info">
+          <h2 id="preview-title">Título del video</h2>
+          <p id="preview-channel" class="channel-name"></p>
+
+          <div class="download-controls">
+            <label for="quality-select" class="sr-only">Calidad</label>
+            <select id="quality-select"></select>
+            <button type="button" id="btn-download-selected" class="btn btn-primary">
+              Descargar ahora
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de progreso -->
+      <div id="progress-panel" class="progress-panel hidden">
+        <div class="progress-header">
+          <span id="progress-label">Preparando descarga...</span>
+          <span id="progress-meta">0%</span>
+        </div>
+        <div class="progress-track">
+          <div id="progress-bar" class="progress-fill" style="width: 0%"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="status-bar">
+      <span class="status-pill {{ 'ok' if has_ffmpeg else 'warn' }}">
+        FFmpeg: {{ 'Activo (HD + MP3)' if has_ffmpeg else 'No detectado (solo MP4 básico)' }}
+      </span>
+      <span class="status-pill {{ 'ok' if has_cookies else 'neutral' }}">
+        Cookies: {{ 'Cargadas (cookies.txt)' if has_cookies else 'Modo estándar' }}
+      </span>
+    </footer>
+  </main>
+
+  <script src="{{ url_for('static', path='/app.js') }}"></script>
+</body>
+</html>
